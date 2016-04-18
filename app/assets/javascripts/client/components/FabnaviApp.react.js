@@ -15,7 +15,7 @@ var EditProject = require('./EditProject.react.js');
 var ProjectDetail = require('./ProjectDetail.react.js');
 var ProjectStore = require('../stores/ProjectStore');
 var WebAPIUtils = require('../utils/WebAPIUtils');
-// var ServerActionCreator = require('../actions/ServerActionCreator');
+var ServerActionCreator = require('../actions/ServerActionCreator');
 
 
 //ract-router
@@ -63,7 +63,7 @@ global.onload = function ( ){
   if(WebAPIUtils.isSigningIn()){
     ServerActionCreator.signIn();
   }
-  // if(WebAPIUtils.isSigningOut()){
-  //   ServerActionCreator.signOut();
-  // }
+  if(WebAPIUtils.SignOut()){
+    ServerActionCreator.signOut();
+  }
 }

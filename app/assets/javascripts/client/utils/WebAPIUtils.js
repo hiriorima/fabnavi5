@@ -308,7 +308,6 @@ var WebAPIUtils = {
 
   signOut : function () {
     clearHeader();
-    ServerActionCreator.signOut();
     window.location.reload();
   }
 
