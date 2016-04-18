@@ -298,7 +298,7 @@ var WebAPIUtils = {
   signIn : function(){
     window.location.href = "http://192.168.33.10:3000/auth/github?auth_origin_url=http://192.168.33.10:3000";
   },
-  
+
   signedIn : function(token,uid,client){
     _accessToken = token;
     _uid = uid;
@@ -308,6 +308,7 @@ var WebAPIUtils = {
 
   signOut : function () {
     clearHeader();
+    ServerActionCreator.signOut();
     window.location.reload();
   }
 
