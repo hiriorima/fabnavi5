@@ -296,7 +296,9 @@ var WebAPIUtils = {
   },
 
   signIn : function(){
-    window.location.href = "http://192.168.33.10:3000/auth/github?auth_origin_url=http://192.168.33.10:3000";
+    var url = window.location.href;
+    var num = url.indexOf("/#/manager");
+    window.location.href = url.substring(0,num) + "/auth/github?auth_origin_url=" + url.substring(0,num);
   },
 
   signedIn : function(token,uid,client){
