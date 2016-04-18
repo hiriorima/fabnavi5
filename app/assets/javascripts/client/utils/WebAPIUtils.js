@@ -56,6 +56,17 @@ function genHeader(){
   };
 }
 
+function getHeader(){
+  var url = window.location.href;
+  if(url.contains("uid") && url.contains("client_id") && url.contains("auth_token")){
+    var uid = url.match(/uid=([a-zA-Z0-9\-]*)/)[1];
+    var client = url.match(/client_id=([a-zA-Z0-9\-]*)/)[1];
+    var token = url.match(/auth_token=([a-zA-Z0-9\-]*)/)[1];
+    signedIn(token, uid, client);
+    window.location.href = window.location.href.split("/")[0] + "/#manager";
+  }
+}
+
 var WebAPIUtils = {
 
   getProject : function( id ){
@@ -292,6 +303,7 @@ var WebAPIUtils = {
   },
 
   isSigningIn : function(){
+    getHeader();
     return !!loadHeader();
   },
 

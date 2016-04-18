@@ -51,15 +51,7 @@ global.onload = function ( ){
   Router.run(routes, function(Handler){
     React.render(React.createElement(Handler, null), document.body);
   });
-
-  var url = window.location.href;
-  if(url.contains("uid") && url.contains("client_id") && url.contains("auth_token")){
-    var uid = url.match(/uid=([a-zA-Z0-9\-]*)/)[1];
-    var client = url.match(/client_id=([a-zA-Z0-9\-]*)/)[1];
-    var token = url.match(/auth_token=([a-zA-Z0-9\-]*)/)[1];
-    WebAPIUtils.signedIn(token, uid, client);
-    window.location.href = window.location.href.split("/")[0] + "/#manager";
-  }
+  
   if(WebAPIUtils.isSigningIn()){
     ServerActionCreator.signIn();
   }
