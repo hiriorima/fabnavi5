@@ -22,6 +22,15 @@ function loadHeader(){
   var header = localStorage.getItem("header");
   if( header == null || !DEVELOPMENT){
     return null;
+  } else {
+    header = JSON.parse(header);
+    _client = header.Client;
+    _uid = header.Uid;
+    _accessToken = header.AccessToken;
+    setTimeout(function(){
+    ServerActionCreator.signIn(_uid);
+    },0);
+    return header;
   }
 
   header = JSON.parse(header);
@@ -282,54 +291,26 @@ var WebAPIUtils = {
     });
   },
 
+  isSigningIn : function(){
+    return !!loadHeader();
+  },
+
   signIn : function(){
-    WebAPIUtils.initPersona();
-    navigator.id.request();
+    window.location.href = "http://192.168.33.10:3000/auth/github?auth_origin_url=http://192.168.33.10:3000";
+  },
+  
+  signedIn : function(token,uid,client){
+    _accessToken = token;
+    _uid = uid;
+    _client = client;
+    setHeader();
   },
 
-  signOut : function (){
-    WebAPIUtils.initPersona();
-    navigator.id.logout();
-  },
-
-  initPersona : function (){
-    navigator.id.watch({
-      onlogin: function(assertion){
-        $.ajax({
-          type:"POST",
-          url:"/api/v1/auth/sign_in",
-          data:{ assertion:assertion },
-          dataType:"json",
-          success: function(res, status, xhr){
-            _accessToken = xhr.getResponseHeader("Access-Token");
-            _uid = xhr.getResponseHeader("Uid");
-            _client = xhr.getResponseHeader("Client");
-            setHeader();
-            ServerActionCreator.signIn(res.email);
-          },
-          error: function(res, status, xhr){
-            console.log(res, status, xhr);
-            clearHeader();
-          }
-        });
-      },
-
-      onlogout: function(){
-        $.ajax({
-          type:"DELETE",
-          url:"/api/v1/auth/sign_out",
-          success: function(res, status, xhr){
-            ServerActionCreator.signOut(res);
-            clearHeader();
-          },
-          error: function(res, status, xhr){
-            console.log(res, status, xhr);
-            clearHeader();
-          }
-        });
-      }
-    });
+  signOut : function () {
+    clearHeader();
+    window.location.reload();
   }
+
 };
 
 
