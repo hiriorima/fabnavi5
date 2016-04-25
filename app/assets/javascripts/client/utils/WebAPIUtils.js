@@ -6,12 +6,12 @@ var _client = null;
 var _uid = null;
 var DEVELOPMENT = true;
 
-function setHeader(client, uid, accessToken){
-  localStorage.setItem("header", JSON.stringify({
-    "Client"        : _client,
-    "Uid"           : _uid,
-    "AccessToken"  : _accessToken
-  }));
+function setHeader(){
+    localStorage.setItem("header",JSON.stringify({
+      "Client"        : _client,
+      "Uid"           : _uid,
+      "AccessToken"  : _accessToken
+    }));
 }
 
 function clearHeader(){
@@ -54,17 +54,6 @@ function genHeader(){
     "Uid"           : _uid,
     "Access-Token"  : _accessToken
   };
-}
-
-function getHeader(){
-  var url = window.location.href;
-  if(url.contains("uid") && url.contains("client_id") && url.contains("auth_token")){
-    var uid = url.match(/uid=([a-zA-Z0-9\-]*)/)[1];
-    var client = url.match(/client_id=([a-zA-Z0-9\-]*)/)[1];
-    var token = url.match(/auth_token=([a-zA-Z0-9\-]*)/)[1];
-    signedIn(token, uid, client);
-    window.location.href = window.location.href.split("/")[0] + "/#manager";
-  }
 }
 
 var WebAPIUtils = {
@@ -110,6 +99,18 @@ var WebAPIUtils = {
       url : "/api/v1/projects.json"
 
     });
+  },
+
+  isSigningIn : function(){
+    var url = window.location.href;
+    if(url.contains("uid") && url.contains("client_id") && url.contains("auth_token")){
+      var token = url.match(/auth_token=([a-zA-Z0-9\-]*)/)[1];
+      var uid = url.match(/uid=([a-zA-Z0-9\-]*)/)[1];
+      var client_id = url.match(/client_id=([a-zA-Z0-9\-]*)/)[1];
+      WebAPIUtils.signedIn(token,uid,client_id);
+      window.location.href = window.location.href.split("/")[0] + "/#manager";
+    }
+    return !!loadHeader();
   },
 
   createProject : function( name, contentAttributesType, description){
@@ -302,15 +303,15 @@ var WebAPIUtils = {
     });
   },
 
-  isSigningIn : function(){
-    getHeader();
-    return !!loadHeader();
-  },
-
   signIn : function(){
     var url = window.location.href;
-    var num = url.indexOf("/#/manager");
-    window.location.href = url.substring(0,num) + "/auth/github?auth_origin_url=" + url.substring(0,num);
+    var host = url.substring(0,url.indexOf("/#/manager"));
+    window.location.href = host + "/auth/github?auth_origin_url=" + host;
+  },
+
+  signOut : function () {
+    clearHeader();
+    window.location.reload();
   },
 
   signedIn : function(token,uid,client){

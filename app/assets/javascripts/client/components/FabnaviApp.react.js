@@ -51,11 +51,10 @@ global.onload = function ( ){
   Router.run(routes, function(Handler){
     React.render(React.createElement(Handler, null), document.body);
   });
-  
   if(WebAPIUtils.isSigningIn()){
     ServerActionCreator.signIn();
   }
   if(WebAPIUtils.SignOut()){
-    ServerActionCreator.signOut();
+     ServerActionCreator.signOut();
   }
 }
