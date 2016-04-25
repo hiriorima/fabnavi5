@@ -23,14 +23,20 @@ function loadHeader(){
   if( header == null || !DEVELOPMENT){
     return null;
   } else {
-    header = JSON.parse(header);
-    _client = header.Client;
-    _uid = header.Uid;
-    _accessToken = header.AccessToken;
-    setTimeout(function(){
-    ServerActionCreator.signIn(_uid);
-    },0);
-    return header;
+    try {
+      header = JSON.parse(header);
+      _client = header.Client;
+      _uid = header.Uid;
+      _accessToken = header.AccessToken;
+      setTimeout(function(){
+      ServerActionCreator.signIn(_uid);
+      },0);
+      return header;
+    }
+    catch(e) {
+      console.log("ERROR. JSON.parse failed");
+      return null;
+    }
   }
 
   header = JSON.parse(header);
